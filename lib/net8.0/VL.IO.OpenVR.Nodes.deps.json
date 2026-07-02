@@ -445,7 +445,10 @@
           "Stride.Core.Mathematics": "4.2.0.2122"
         },
         "runtime": {
-          "VL.IO.OpenVR.Core.dll": {}
+          "VL.IO.OpenVR.Core.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

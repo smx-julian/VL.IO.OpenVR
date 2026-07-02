@@ -128,26 +128,30 @@ namespace VL.IO.ValveOpenVR
 
             for (int i = 0; i < devicecount; i++)
             {
+                if (!_system.IsTrackedDeviceConnected((uint)i)) continue;
+
                 var deviceclass = _system.GetTrackedDeviceClass((uint)i);
 
                 var c = OpenVRController.Input(i);
-
-                if (!c.connected || !c.valid) continue;
 
                 _devices.Add(c);
                 _deviceRoles.Add(_system.GetControllerRoleForTrackedDeviceIndex((uint)i));
 
                 _deviceClasses.Add(deviceclass);
 
+                string serial = null;
                 if (refreshSerials)
-                    _deviceSerials.Add(GetSerial(i));
+                {
+                    serial = GetSerial(i);
+                    _deviceSerials.Add(serial);
+                }
 
                 if (deviceclass == ETrackedDeviceClass.GenericTracker)
                 {
                     _trackers.Add(c);
 
                     if (refreshSerials)
-                        _trackerSerials.Add(_deviceSerials[i]);
+                        _trackerSerials.Add(serial);
                 }
             }
         }

@@ -165,6 +165,8 @@ namespace VL.IO.ValveOpenVR
             var devicePose = OpenVRManager.GamePoses[Controller.index];
 
             GetPose(devicePose, out _pose, out _velocity, out _angularVelocity);
+
+            var trackingResult = devicePose.eTrackingResult;
             
             DeviceIndex = (int)Controller.index;
 
@@ -189,12 +191,12 @@ namespace VL.IO.ValveOpenVR
 
             BatteryPercentage = GetBatteryPercentage(Controller.index);
 
-            Valid = Controller.valid;
-            Connected = Controller.connected;
-            HasTracking = Controller.hasTracking;
-            OutOfRange = Controller.outOfRange;
-            Calibrating = Controller.calibrating;
-            Uninitialized = Controller.uninitialized;
+            Connected = _system.IsTrackedDeviceConnected(Controller.index);
+            Valid = devicePose.bPoseIsValid;
+            HasTracking = devicePose.bPoseIsValid;
+            OutOfRange = trackingResult == ETrackingResult.Running_OutOfRange || trackingResult == ETrackingResult.Calibrating_OutOfRange;
+            Calibrating = trackingResult == ETrackingResult.Calibrating_InProgress || trackingResult == ETrackingResult.Calibrating_OutOfRange;
+            Uninitialized = trackingResult == ETrackingResult.Uninitialized;
         }
 
     }
