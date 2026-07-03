@@ -150,7 +150,13 @@ namespace VL.IO.ValveOpenVR
             private set;
         }
 
-        public OpenVRTrackedDeviceSplit() 
+        public ETrackingResult TrackingResult
+        {
+            get;
+            private set;
+        }
+
+        public OpenVRTrackedDeviceSplit()
         {
             DeviceSerial = "";
             BatteryPercentage = 0.0f;
@@ -191,12 +197,13 @@ namespace VL.IO.ValveOpenVR
 
             BatteryPercentage = GetBatteryPercentage(Controller.index);
 
-            Connected = _system.IsTrackedDeviceConnected(Controller.index);
+            Connected = devicePose.bDeviceIsConnected;
             Valid = devicePose.bPoseIsValid;
-            HasTracking = devicePose.bPoseIsValid;
+            HasTracking = trackingResult == ETrackingResult.Running_OK;
             OutOfRange = trackingResult == ETrackingResult.Running_OutOfRange || trackingResult == ETrackingResult.Calibrating_OutOfRange;
             Calibrating = trackingResult == ETrackingResult.Calibrating_InProgress || trackingResult == ETrackingResult.Calibrating_OutOfRange;
             Uninitialized = trackingResult == ETrackingResult.Uninitialized;
+            TrackingResult = trackingResult;
         }
 
     }
